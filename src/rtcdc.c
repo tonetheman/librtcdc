@@ -120,6 +120,7 @@ rtcdc_create_peer_connection(rtcdc_on_channel_cb on_channel,
     freeaddrinfo(servinfo);
   }
 
+  printf("allocating memory for peer...\n");
   struct rtcdc_peer_connection *peer =
     (struct rtcdc_peer_connection *)calloc(1, sizeof *peer);
   if (peer == NULL)
@@ -131,7 +132,8 @@ rtcdc_create_peer_connection(rtcdc_on_channel_cb on_channel,
   peer->on_candidate = on_candidate;
   peer->on_connect = on_connect;
   peer->user_data = user_data;
-
+  
+  printf("returning peer now!\n");
   return peer;
 }
 
@@ -163,14 +165,22 @@ rtcdc_destroy_peer_connection(struct rtcdc_peer_connection *peer)
 char *
 rtcdc_generate_offer_sdp(struct rtcdc_peer_connection *peer)
 {
-  if (peer == NULL)
+  printf("rtcdc_generate_offer_sdp called\n");
+
+  if (peer == NULL) {
+    printf("rtcdc_generate_offer_sdp: peer is null DONE in rtcdc_generate_offer_sdp\n");
     return NULL;
+  }
   
   if (peer->transport == NULL) {
-    if (create_rtcdc_transport(peer, RTCDC_PEER_ROLE_CLIENT) < 0)
+    printf("rtcdc_generate_offer_sdp: about to create rtcdc transport...\n");
+    if (create_rtcdc_transport(peer, RTCDC_PEER_ROLE_CLIENT) < 0) {
+      printf("rtcdc_generate_offer_sdp: could not create transport\n");
       return NULL;
+    }
   }
   int client = peer->role == RTCDC_PEER_ROLE_CLIENT ? 1 : 0;
+  printf("rtcdc_generate_offer_sdp: about to call generate local sdp\n");
   return generate_local_sdp(peer->transport, client);
 }
 
