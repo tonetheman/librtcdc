@@ -41,7 +41,7 @@ public:
 
 void on_candidate_cb(struct rtcdc_peer_connection *peer,
                                       const char *candidate, void *user_data) {
-	cout << "on_candidate_cb called" << endl;
+	cout << "on_candidate_cb called: " << candidate << endl;
 }
 void on_channel_cb(struct rtcdc_peer_connection *peer,
                                     struct rtcdc_data_channel *channel, void *user_data) {
